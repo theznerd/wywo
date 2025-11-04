@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("wywo.shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ae8fa3670918ccc0e2cc95b73af5c65f1f0baba4")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+bea1e5a49b5fc58c5aa3ec3d8bd191f510f358a4")]
 [assembly: System.Reflection.AssemblyProductAttribute("wywo.shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("wywo.shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
