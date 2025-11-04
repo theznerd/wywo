@@ -1,171 +1,144 @@
-﻿@page "/admin/chats";
-
+﻿@page "/admin/chats"
 @layout MainLayout
 @inherits FlowbitePage
 
+@inject NavigationManager NavManager
+
 <PageTitle>Admin - Chats</PageTitle>
 
-<div class="relative overflow-x-auto">
-    <div class="pb-4 bg-white dark:bg-gray-900">
-        <label for="table-search" class="sr-only">Search</label>
-        <div class="relative mt-1">
-            <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
-                <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
-                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
-                </svg>
-            </div>
-            <input type="text" id="table-search" class="block pt-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-80 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Search for items">
+<div class="relative overflow-visible">
+  <h1 class="mb-4 text-3xl leading-none tracking-tight text-gray-900 dark:text-white">Chats</h1>
+  <div class="pb-4 bg-white dark:bg-gray-900 flex-1 min-w-0 mb-2">
+    <label for="search" class="sr-only">Search chatrooms</label>
+    <div class="relative mt-1">
+        <div class="absolute inset-y-0 rtl:inset-r-0 start-0 flex items-center ps-3 pointer-events-none">
+            <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 20 20">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z" />
+            </svg>
         </div>
+      <input id="search" type="text" placeholder="Search by title or description..."
+                   class="block py-2.5 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg w-full min-w-0 bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+             @bind="searchTerm" @bind:event="oninput" />
     </div>
-    <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
-            <tr>
-                <th scope="col" class="px-6 py-3">
-                    Product name
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Color
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Category
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Price
-                </th>
-                <th scope="col" class="px-6 py-3">
-                    Action
-                </th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple MacBook Pro 17"
-                </th>
-                <td class="px-6 py-4">
-                    Silver
-                </td>
-                <td class="px-6 py-4">
-                    Laptop
-                </td>
-                <td class="px-6 py-4">
-                    $2999
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Microsoft Surface Pro
-                </th>
-                <td class="px-6 py-4">
-                    White
-                </td>
-                <td class="px-6 py-4">
-                    Laptop PC
-                </td>
-                <td class="px-6 py-4">
-                    $1999
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Magic Mouse 2
-                </th>
-                <td class="px-6 py-4">
-                    Black
-                </td>
-                <td class="px-6 py-4">
-                    Accessories
-                </td>
-                <td class="px-6 py-4">
-                    $99
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple Watch
-                </th>
-                <td class="px-6 py-4">
-                    Silver
-                </td>
-                <td class="px-6 py-4">
-                    Accessories
-                </td>
-                <td class="px-6 py-4">
-                    $179
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    iPad
-                </th>
-                <td class="px-6 py-4">
-                    Gold
-                </td>
-                <td class="px-6 py-4">
-                    Tablet
-                </td>
-                <td class="px-6 py-4">
-                    $699
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-            <tr class="bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-600">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                    Apple iMac 27"
-                </th>
-                <td class="px-6 py-4">
-                    Silver
-                </td>
-                <td class="px-6 py-4">
-                    PC Desktop
-                </td>
-                <td class="px-6 py-4">
-                    $3999
-                </td>
-                <td class="px-6 py-4">
-                    <a href="#" class="font-medium text-blue-600 dark:text-blue-500 hover:underline">Edit</a>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <nav class="flex items-center flex-column flex-wrap md:flex-row justify-between pt-4" aria-label="Table navigation">
-        <span class="text-sm font-normal text-gray-500 dark:text-gray-400 mb-4 md:mb-0 block w-full md:inline md:w-auto">Showing <span class="font-semibold text-gray-900 dark:text-white">1-10</span> of <span class="font-semibold text-gray-900 dark:text-white">1000</span></span>
-        <ul class="inline-flex -space-x-px rtl:space-x-reverse text-sm h-8">
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 ms-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-s-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Previous</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">1</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">2</a>
-            </li>
-            <li>
-                <a href="#" aria-current="page" class="flex items-center justify-center px-3 h-8 text-blue-600 border border-gray-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">3</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">4</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">5</a>
-            </li>
-            <li>
-                <a href="#" class="flex items-center justify-center px-3 h-8 leading-tight text-gray-500 bg-white border border-gray-300 rounded-e-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">Next</a>
-            </li>
-        </ul>
-    </nav>
+  </div>
+
+  @if (!FilteredRooms.Any())
+  {
+    <div class="text-center text-gray-500 py-12">
+      No chatrooms found for "<strong class="text-gray-700">@searchTerm</strong>".
+    </div>
+  }
+  else
+  {
+    <div class="grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      @foreach (var room in FilteredRooms)
+      {
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-md hover:shadow-xl transition-transform transform hover:-translate-y-0.5 cursor-pointer relative"
+             @onclick="@(() => OpenChat(room.Id))" role="button" tabindex="0">
+          <div class="p-4">
+            <div class="flex items-start justify-between">
+              <div class="flex-1 min-w-0">
+                <h2 class="text-lg font-medium text-gray-900 dark:text-gray-100 truncate">@room.Title</h2>
+                <p class="mt-2 text-sm text-gray-600 dark:text-gray-300 line-clamp-3 break-words">@room.Description</p>
+              </div>
+              <div class="ml-3 flex flex-col items-end space-y-2">
+                <button class="text-red-600 hover:text-red-800 p-1"
+                        title="Delete chatroom"
+                        @onclick:stopPropagation="true"
+                        @onclick="@(() => ConfirmDelete(room))">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+    </div>
+  }
+
+  <!-- Confirmation modal -->
+  @if (showConfirm)
+  {
+    <div class="fixed inset-0 z-50 flex items-center justify-center">
+      <div class="fixed inset-0 bg-black opacity-40" @onclick="CancelDelete"></div>
+
+      <div class="bg-white rounded-lg shadow-lg max-w-md w-full z-10 overflow-hidden">
+        <div class="p-6">
+          <h3 class="text-lg font-semibold text-gray-900">Delete chatroom</h3>
+          <p class="mt-3 text-sm text-gray-600">
+            Are you sure you want to delete the chatroom
+            <strong class="text-gray-800">@selectedToDelete?.Title</strong>?
+            This will permanently remove the chatroom and its messages.
+          </p>
+
+          <div class="mt-6 flex justify-end space-x-3">
+            <button class="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
+                    @onclick="CancelDelete">Cancel</button>
+            <button class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700"
+                    @onclick="PerformDelete">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  }
 </div>
+
+@code {
+  // Lightweight UI-only mock data (no API calls). We'll refactor to real services later.
+  private string searchTerm = string.Empty;
+
+  private List<ChatRoom> chatRooms = new()
+  {
+    new ChatRoom(Guid.Parse("11111111-1111-1111-1111-111111111111"), "General", "Welcome to the general chatroom. Use this to discuss general topics and announcements."),
+    new ChatRoom(Guid.Parse("22222222-2222-2222-2222-222222222222"), "Support", "This is the support room. Post issues and questions and we will help."),
+    new ChatRoom(Guid.Parse("33333333-3333-3333-3333-333333333333"), "Random", "Off-topic conversations, memes, and casual chat live here."),
+    new ChatRoom(Guid.Parse("44444444-4444-4444-4444-444444444444"), "Project A", "Discussion thread for Project A kickoff and coordination."),
+    new ChatRoom(Guid.Parse("55555555-5555-5555-5555-555555555555"), "Announcements", "Official announcements and release notes are posted here."),
+  };
+
+  private ChatRoom? selectedToDelete;
+  private bool showConfirm = false;
+
+  private IReadOnlyList<ChatRoom> FilteredRooms =>
+    string.IsNullOrWhiteSpace(searchTerm)
+      ? chatRooms
+      : chatRooms
+          .Where(r => r.Title.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)
+                   || r.Description.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+          .ToList();
+
+  private void OpenChat(Guid id)
+  {
+    NavManager.NavigateTo($"/chats/{id}");
+  }
+
+  private void ConfirmDelete(ChatRoom room)
+  {
+    selectedToDelete = room;
+    showConfirm = true;
+  }
+
+  private void CancelDelete()
+  {
+    selectedToDelete = null;
+    showConfirm = false;
+  }
+
+  private void PerformDelete()
+  {
+    if (selectedToDelete is not null)
+    {
+      // Mock deletion - remove from UI list immediately.
+      chatRooms.RemoveAll(r => r.Id == selectedToDelete!.Id);
+    }
+
+    selectedToDelete = null;
+    showConfirm = false;
+  }
+
+  private sealed record ChatRoom(Guid Id, string Title, string Description);
+}
+
