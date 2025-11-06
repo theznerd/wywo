@@ -1,0 +1,147 @@
+﻿@page "/chats"
+@page "/chats/{id}"
+
+@inherits FlowbitePage
+@layout ChatLayout
+
+<PageTitle>Chat @Title</PageTitle>
+
+<div class="flex items-center justify-center">
+<div class="flex flex-col min-h-[calc(100vh-56px)] w-full sm:max-w-[640px]">
+    <!-- Messages -->
+    <div class="flex-1 overflow-y-auto scrollbar-gutter-stable p-4 space-y-5 bg-gray-100 dark:bg-gray-900">
+        @foreach (var m in Messages)
+        {
+            var isMine = m.SenderId == CurrentUserId;
+            if (!isMine)
+            {
+                <!-- Left (other user) -->
+                <div class="flex items-start gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 flex items-center justify-center text-xs font-semibold select-none">
+                        @GetInitials(m.SenderName)
+                    </div>
+                    <div class="flex flex-col gap-1 w-full max-w-[320px]">
+                        <div class="flex items-center space-x-2 rtl:space-x-reverse">
+                            <span class="text-sm font-semibold text-gray-900 dark:text-white">@m.SenderName</span>
+                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">@m.Timestamp.LocalDateTime.ToString("t")</span>
+                        </div>
+                        <div class="flex flex-col leading-1.5 p-4 border-gray-300 bg-gray-200 rounded-e-xl rounded-es-xl dark:bg-gray-700">
+                            <p class="text-sm font-normal text-gray-900 dark:text-white">@m.Content</p>
+                        </div>
+                    </div>
+                </div>
+            }
+            else
+            {
+                <!-- Right (current user) -->
+                <div class="flex items-start gap-2.5 justify-end">
+                    <div class="flex flex-col gap-1 w-full max-w-[320px]">
+                        <div class="flex items-center justify-end space-x-2 rtl:space-x-reverse">
+                            <span class="text-sm font-normal text-gray-500 dark:text-gray-400">@m.Timestamp.LocalDateTime.ToString("t")</span>
+                            <span class="text-sm font-semibold text-gray-900 dark:text-white">You</span>
+                        </div>
+                            <div class="flex flex-col leading-1.5 p-4 border-blue-300 bg-blue-200 rounded-e-xl rounded-es-xl dark:bg-blue-700">
+                            <p class="text-sm font-normal text-gray-900 dark:text-white">@m.Content</p>
+                        </div>
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 flex items-center justify-center text-xs font-semibold select-none">
+                        @GetInitials(CurrentUserName)
+                    </div>
+                </div>
+            }
+        }
+    </div>
+
+    <!-- Input -->
+    <form class="sticky bottom-0 w-full border-t border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-3"
+          @onsubmit="SendMessageAsync">
+        <div class="flex items-center gap-2">
+            <input type="text"
+                   class="flex-1 block w-full p-2.5 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-600 focus:border-blue-600 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white"
+                   placeholder="Type a message"
+                   @bind="NewMessageText"
+                   @bind:event="oninput" />
+
+            <button type="submit"
+                    disabled="@string.IsNullOrWhiteSpace(NewMessageText)"
+                    class="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg disabled:opacity-50 hover:bg-blue-700 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:focus:ring-blue-800">
+                <svg class="w-4 h-4" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M2.94 2.94a1.5 1.5 0 0 1 1.6-.33l12 4.5a1.5 1.5 0 0 1 0 2.78l-12 4.5a1.5 1.5 0 0 1-2.02-1.86l1.15-3.84 6.74-1.15-6.74-1.15L2.52 4.8a1.5 1.5 0 0 1 .42-1.86z" />
+                </svg>
+                Send
+            </button>
+        </div>
+    </form>
+</div>
+</div>
+
+@code {
+    [Parameter] public string id { get; set; }
+
+    public string Title { get; set; } = "Loading...";
+
+    private readonly string CurrentUserId = "me";
+    private readonly string CurrentUserName = "You";
+
+    private string NewMessageText { get; set; } = string.Empty;
+
+    private record ChatMessage(string Id, string SenderId, string SenderName, DateTimeOffset Timestamp, string Content);
+
+    private readonly List<ChatMessage> Messages = new();
+
+    private bool _initialized;
+
+    protected override void OnParametersSet()
+    {
+        Title = string.IsNullOrWhiteSpace(id) ? "Conversation" : $"Conversation {id}";
+
+        if (_initialized) return;
+        _initialized = true;
+
+        // Mock data
+        var now = DateTimeOffset.Now;
+        Messages.AddRange(new[]
+        {
+            new ChatMessage(Guid.NewGuid().ToString(), "u-al", "Aiden Lee", now.AddMinutes(-18), "Hey there! 👋"),
+            new ChatMessage(Guid.NewGuid().ToString(), CurrentUserId, CurrentUserName, now.AddMinutes(-17), "Hi Aiden, great to hear from you."),
+            new ChatMessage(Guid.NewGuid().ToString(), "u-al", "Aiden Lee", now.AddMinutes(-15), "Quick question: can we ship by Friday?"),
+            new ChatMessage(Guid.NewGuid().ToString(), CurrentUserId, CurrentUserName, now.AddMinutes(-12), "Yes, that works. I’ll send the final draft today."),
+            new ChatMessage(Guid.NewGuid().ToString(), "u-sr", "Sofia Rivera", now.AddMinutes(-9), "Jumping in — I’ll handle the docs 📄"),
+            new ChatMessage(Guid.NewGuid().ToString(), CurrentUserId, CurrentUserName, now.AddMinutes(-6), "Awesome, thanks Sofia! 😊"),
+        });
+    }
+
+    private string GetInitials(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name)) return "?";
+        var parts = name.Split(' ', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
+        return parts.Length switch
+        {
+            0 => "?",
+            1 => parts[0][0].ToString().ToUpperInvariant(),
+            _ => $"{char.ToUpperInvariant(parts[0][0])}{char.ToUpperInvariant(parts[^1][0])}"
+        };
+    }
+
+    private void InsertEmoji()
+    {
+        NewMessageText = (NewMessageText ?? string.Empty) + " 😊";
+    }
+
+    private Task SendMessageAsync()
+    {
+        if (string.IsNullOrWhiteSpace(NewMessageText))
+            return Task.CompletedTask;
+
+        Messages.Add(new ChatMessage(
+            Guid.NewGuid().ToString(),
+            CurrentUserId,
+            CurrentUserName,
+            DateTimeOffset.Now,
+            NewMessageText.Trim()));
+
+        NewMessageText = string.Empty;
+        StateHasChanged();
+        return Task.CompletedTask;
+    }
+}
