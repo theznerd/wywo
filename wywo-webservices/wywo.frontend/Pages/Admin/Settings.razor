@@ -1,0 +1,142 @@
+﻿@page "/admin/settings"
+@layout AdminLayout
+@inherits FlowbitePage
+
+@inject NavigationManager NavManager
+
+<PageTitle>Admin - Settings</PageTitle>
+
+<div class="relative overflow-visible">
+    <h1 class="mb-4 text-3xl leading-none tracking-tight text-gray-900 dark:text-white">Settings</h1>
+    <form class="space-y-6" action="#">
+        <label for="displayname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">WYWO Display Name</label>
+        <input type="text" id="displayname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="The Ziehnert's" value="@test_settings.DisplayName" required />
+    </form>
+    <label for="devicestable" class="mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Registered Devices</label>
+    <table id="devicestable" class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <colgroup>
+            <col class="w-40" />
+            <col class="" />
+            <col class="" />
+            <col class="w-24" />
+        </colgroup>
+
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Device Name</th>
+                <th scope="col" class="px-6 py-3 truncate">Device ID</th>
+                <th scope="col" class="px-6 py-3 truncate">Registered Date</th>
+                <th scope="col" class="px-6 py-3"> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var device in test_settings.WYWODevices)
+            {
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="px-6 py-1 font-medium text-gray-900 dark:text-white">
+                        <div class="max-w-full truncate">@device.DeviceName</div>
+                    </th>
+                    <td class="px-6 py-1">
+                        <div class="min-w-0 max-w-full truncate">@device.DeviceID</div>
+                    </td>
+                    <td class="px-6 py-1">
+                        <div class="min-w-0 max-w-full truncate">@device.RegisteredDate.ToString("Y")</div>
+                    </td>
+                    <td class="px-6 py-1">
+                        <div class="flex gap-2 whitespace-nowrap justify-start">
+                            <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <label for="userstable" class="mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Users</label>
+    <table id="userstable" class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+        <colgroup>
+            <col class="w-40" />
+            <col class="" />
+            <col class="w-38" />
+        </colgroup>
+
+        <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+            <tr>
+                <th scope="col" class="px-6 py-3">Name</th>
+                <th scope="col" class="px-6 py-3 truncate">Email</th>
+                <th scope="col" class="px-6 py-3"> </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in test_settings.WYWOUsers)
+            {
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 border-gray-200 hover:bg-gray-50 dark:hover:bg-gray-600">
+                    <th scope="row" class="px-6 py-1 font-medium text-gray-900 dark:text-white">
+                        <div class="max-w-full truncate">@user.DisplayName</div>
+                    </th>
+                    <td class="px-6 py-1">
+                        <div class="min-w-0 max-w-full truncate">@user.Email</div>
+                    </td>
+                    <td class="px-6 py-1">
+                        <div class="flex gap-2 whitespace-nowrap justify-front">
+                            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</button>
+                            <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">Delete</button>
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+@code {
+    private WYWOSettings test_settings = new WYWOSettings();
+
+    protected override void OnInitialized()
+    {
+        test_settings.DisplayName = "The Ziehnert's";
+        test_settings.WYWODevices.Add(new WYWODevice
+        {
+            DeviceName = "Summer Home",
+            DeviceID = "42:9e:23:43:22:c4",
+            RegisteredDate = DateTime.Now.AddDays(-50)
+        });
+        test_settings.WYWODevices.Add(new WYWODevice
+        {
+            DeviceName = "Lake House",
+            DeviceID = "52:3e:48:48:42:c7",
+            RegisteredDate = DateTime.Now.AddDays(-23)
+        });
+        test_settings.WYWOUsers.Add(new WYWOUser
+        {
+            DisplayName = "Nathan Ziehnert",
+            Email = "nathan.ziehnert@gmail.com"
+        });
+        test_settings.WYWOUsers.Add(new WYWOUser
+        {
+            DisplayName = "Rachel Ziehnert",
+            Email = "rachel.ziehnert@gmail.com"
+        });
+
+        base.OnInitialized();
+    }
+
+    private class WYWOSettings
+    {
+        public string DisplayName { get; set; } = "";
+        public List<WYWODevice> WYWODevices = new List<WYWODevice>();
+        public List<WYWOUser> WYWOUsers = new List<WYWOUser>();
+    }
+
+    private class WYWODevice
+    {
+        public string DeviceName { get; set; } = "Device 1";
+        public string DeviceID { get; set; } = "52:3e:48:48:42:c7";
+        public DateTime RegisteredDate { get; set; } = DateTime.Now.AddDays(-23);
+    }
+
+    private class WYWOUser
+    {
+        public string DisplayName { get; set; } = "Nathan Ziehnert";
+        public string Email { get; set; } = "nathan.ziehnert@gmail.com";
+    }
+}

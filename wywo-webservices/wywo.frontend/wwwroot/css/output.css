@@ -1037,9 +1037,6 @@
   .ms-3 {
     margin-inline-start: calc(var(--spacing) * 3);
   }
-  .ms-auto {
-    margin-inline-start: auto;
-  }
   .mt-1 {
     margin-top: calc(var(--spacing) * 1);
   }
@@ -1048,6 +1045,9 @@
   }
   .mt-3 {
     margin-top: calc(var(--spacing) * 3);
+  }
+  .mt-4 {
+    margin-top: calc(var(--spacing) * 4);
   }
   .mt-6 {
     margin-top: calc(var(--spacing) * 6);
@@ -1462,9 +1462,6 @@
   .h-8 {
     height: calc(var(--spacing) * 8);
   }
-  .h-10 {
-    height: calc(var(--spacing) * 10);
-  }
   .h-12 {
     height: calc(var(--spacing) * 12);
   }
@@ -1486,17 +1483,8 @@
   .max-h-full {
     max-height: 100%;
   }
-  .min-h-\[100dvh\] {
-    min-height: 100dvh;
-  }
   .min-h-\[calc\(100vh-56px\)\] {
     min-height: calc(100vh - 56px);
-  }
-  .min-h-full {
-    min-height: 100%;
-  }
-  .min-h-max {
-    min-height: max-content;
   }
   .min-h-screen {
     min-height: 100vh;
@@ -1599,11 +1587,23 @@
   .w-8 {
     width: calc(var(--spacing) * 8);
   }
-  .w-10 {
-    width: calc(var(--spacing) * 10);
+  .w-21 {
+    width: calc(var(--spacing) * 21);
+  }
+  .w-23 {
+    width: calc(var(--spacing) * 23);
+  }
+  .w-24 {
+    width: calc(var(--spacing) * 24);
+  }
+  .w-34 {
+    width: calc(var(--spacing) * 34);
   }
   .w-36 {
     width: calc(var(--spacing) * 36);
+  }
+  .w-38 {
+    width: calc(var(--spacing) * 38);
   }
   .w-40 {
     width: calc(var(--spacing) * 40);
@@ -1620,9 +1620,6 @@
   .max-w-2xl {
     max-width: var(--container-2xl);
   }
-  .max-w-3xl {
-    max-width: var(--container-3xl);
-  }
   .max-w-64 {
     max-width: calc(var(--spacing) * 64);
   }
@@ -1631,6 +1628,9 @@
   }
   .max-w-full {
     max-width: 100%;
+  }
+  .max-w-lg {
+    max-width: var(--container-lg);
   }
   .max-w-md {
     max-width: var(--container-md);
@@ -1705,9 +1705,6 @@
   }
   .min-w-full {
     min-width: 100%;
-  }
-  .min-w-screen {
-    min-width: 100vw;
   }
   .flex-1 {
     flex: 1;
@@ -1882,15 +1879,8 @@
   .rounded-xl {
     border-radius: var(--radius-xl);
   }
-  .rounded-s-xl {
-    border-start-start-radius: var(--radius-xl);
-    border-end-start-radius: var(--radius-xl);
-  }
   .rounded-e-xl {
     border-start-end-radius: var(--radius-xl);
-    border-end-end-radius: var(--radius-xl);
-  }
-  .rounded-ee-xl {
     border-end-end-radius: var(--radius-xl);
   }
   .rounded-es-xl {
@@ -2115,9 +2105,6 @@
   .bg-black {
     background-color: var(--color-black);
   }
-  .bg-blue-100 {
-    background-color: var(--color-blue-100);
-  }
   .bg-blue-200 {
     background-color: var(--color-blue-200);
   }
@@ -2135,9 +2122,6 @@
   }
   .bg-gray-200 {
     background-color: var(--color-gray-200);
-  }
-  .bg-gray-300 {
-    background-color: var(--color-gray-300);
   }
   .bg-gray-900\/50 {
     background-color: color-mix(in srgb, #111827 50%, transparent);
@@ -2448,9 +2432,6 @@
   }
   .whitespace-nowrap {
     white-space: nowrap;
-  }
-  .whitespace-pre-line {
-    white-space: pre-line;
   }
   .datatable-sorter {
     .datatable-wrapper .datatable-table thead th & {
@@ -2772,44 +2753,14 @@
       max-width: 640px;
     }
   }
+  .sm\:max-w-lg {
+    @media (width >= 40rem) {
+      max-width: var(--container-lg);
+    }
+  }
   .sm\:max-w-md {
     @media (width >= 40rem) {
       max-width: var(--container-md);
-    }
-  }
-  .sm\:min-w-2xl {
-    @media (width >= 40rem) {
-      min-width: var(--container-2xl);
-    }
-  }
-  .sm\:min-w-3xl {
-    @media (width >= 40rem) {
-      min-width: var(--container-3xl);
-    }
-  }
-  .sm\:min-w-\[384px\] {
-    @media (width >= 40rem) {
-      min-width: 384px;
-    }
-  }
-  .sm\:min-w-\[640px\] {
-    @media (width >= 40rem) {
-      min-width: 640px;
-    }
-  }
-  .sm\:min-w-md {
-    @media (width >= 40rem) {
-      min-width: var(--container-md);
-    }
-  }
-  .sm\:min-w-sm {
-    @media (width >= 40rem) {
-      min-width: var(--container-sm);
-    }
-  }
-  .sm\:min-w-xl {
-    @media (width >= 40rem) {
-      min-width: var(--container-xl);
     }
   }
   .sm\:translate-x-0 {
@@ -2981,11 +2932,6 @@
   .dark\:text-blue-500 {
     @media (prefers-color-scheme: dark) {
       color: var(--color-blue-500);
-    }
-  }
-  .dark\:text-gray-50 {
-    @media (prefers-color-scheme: dark) {
-      color: var(--color-gray-50);
     }
   }
   .dark\:text-gray-100 {
