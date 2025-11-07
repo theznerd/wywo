@@ -17,6 +17,10 @@
 # Mono auto generated files
 mono_crash.*
 
+# Remove obj and bin folders
+**/[Oo]bj/
+**/[Bb]in/
+
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/

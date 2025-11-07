@@ -133,7 +133,6 @@
     --container-lg: 32rem;
     --container-xl: 36rem;
     --container-2xl: 42rem;
-    --container-3xl: 48rem;
     --container-4xl: 56rem;
     --container-7xl: 80rem;
     --text-xs: 0.75rem;
@@ -1587,17 +1586,8 @@
   .w-8 {
     width: calc(var(--spacing) * 8);
   }
-  .w-21 {
-    width: calc(var(--spacing) * 21);
-  }
-  .w-23 {
-    width: calc(var(--spacing) * 23);
-  }
   .w-24 {
     width: calc(var(--spacing) * 24);
-  }
-  .w-34 {
-    width: calc(var(--spacing) * 34);
   }
   .w-36 {
     width: calc(var(--spacing) * 36);
@@ -1608,9 +1598,6 @@
   .w-40 {
     width: calc(var(--spacing) * 40);
   }
-  .w-42 {
-    width: calc(var(--spacing) * 42);
-  }
   .w-64 {
     width: calc(var(--spacing) * 64);
   }
@@ -1620,23 +1607,14 @@
   .max-w-2xl {
     max-width: var(--container-2xl);
   }
-  .max-w-64 {
-    max-width: calc(var(--spacing) * 64);
-  }
   .max-w-\[320px\] {
     max-width: 320px;
   }
   .max-w-full {
     max-width: 100%;
   }
-  .max-w-lg {
-    max-width: var(--container-lg);
-  }
   .max-w-md {
     max-width: var(--container-md);
-  }
-  .max-w-xl {
-    max-width: var(--container-xl);
   }
   .datatable-input {
     .datatable-wrapper .datatable-search & {
@@ -1708,9 +1686,6 @@
   }
   .flex-1 {
     flex: 1;
-  }
-  .flex-none {
-    flex: none;
   }
   .flex-shrink {
     flex-shrink: 1;
@@ -1883,15 +1858,9 @@
     border-start-start-radius: var(--radius-xl);
     border-end-start-radius: var(--radius-xl);
   }
-  .rounded-ss-xl {
-    border-start-start-radius: var(--radius-xl);
-  }
   .rounded-e-xl {
     border-start-end-radius: var(--radius-xl);
     border-end-end-radius: var(--radius-xl);
-  }
-  .rounded-se-xl {
-    border-start-end-radius: var(--radius-xl);
   }
   .rounded-ee-xl {
     border-end-end-radius: var(--radius-xl);
