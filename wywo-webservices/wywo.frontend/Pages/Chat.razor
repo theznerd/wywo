@@ -3,6 +3,7 @@
 
 @inherits FlowbitePage
 @layout ChatLayout
+@inject IJSRuntime JS
 
 <PageTitle>Chat @Title</PageTitle>
 
@@ -118,6 +119,16 @@
         });
     }
 
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await base.OnAfterRenderAsync(firstRender);
+        if (firstRender)
+        {
+            // Scroll whole page to bottom once content is rendered
+            await JS.InvokeVoidAsync("scrollPageToBottom");
+        }
+    }
+
     private string GetInitials(string name)
     {
         if (string.IsNullOrWhiteSpace(name)) return "?";
@@ -128,11 +139,6 @@
             1 => parts[0][0].ToString().ToUpperInvariant(),
             _ => $"{char.ToUpperInvariant(parts[0][0])}{char.ToUpperInvariant(parts[^1][0])}"
         };
-    }
-
-    private void InsertEmoji()
-    {
-        NewMessageText = (NewMessageText ?? string.Empty) + " 😊";
     }
 
     private Task SendMessageAsync()

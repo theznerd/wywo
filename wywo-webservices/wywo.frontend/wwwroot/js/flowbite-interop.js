@@ -4,6 +4,12 @@
     }
 };
 
+window.scrollPageToBottom = function () {
+    requestAnimationFrame(() => {
+        window.scrollTo(0, document.documentElement.scrollHeight);
+    });
+};
+
 // Format an input element's value to (nnn) nnn-nnnn as the user types.
 // Usage in markup: <input oninput="formatPhoneInput(this)" inputmode="numeric" maxlength="14" ... />
 window.formatPhoneInput = function (el) {
