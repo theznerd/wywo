@@ -1879,8 +1879,21 @@
   .rounded-xl {
     border-radius: var(--radius-xl);
   }
+  .rounded-s-xl {
+    border-start-start-radius: var(--radius-xl);
+    border-end-start-radius: var(--radius-xl);
+  }
+  .rounded-ss-xl {
+    border-start-start-radius: var(--radius-xl);
+  }
   .rounded-e-xl {
     border-start-end-radius: var(--radius-xl);
+    border-end-end-radius: var(--radius-xl);
+  }
+  .rounded-se-xl {
+    border-start-end-radius: var(--radius-xl);
+  }
+  .rounded-ee-xl {
     border-end-end-radius: var(--radius-xl);
   }
   .rounded-es-xl {
