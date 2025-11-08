@@ -12,7 +12,10 @@
         <label for="displayname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">WYWO Display Name</label>
         <input type="text" id="displayname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="The Ziehnert's" value="@test_settings.DisplayName" required />
     </form>
-    <label for="devicestable" class="mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Registered Devices</label>
+    <div class="flex items-center space-x-2 mt-4 mb-2">
+        <label for="devicestable" class="block text-sm font-medium text-gray-900 dark:text-white">Registered Devices</label>
+        <button type="button" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Add Device</button>
+    </div>
     <table id="devicestable" class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <colgroup>
             <col class="w-40" />
@@ -44,14 +47,20 @@
                     </td>
                     <td class="px-6 py-1">
                         <div class="flex gap-2 whitespace-nowrap justify-start">
-                            <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">Delete</button>
+                            <button type="button"
+                                    @onclick:stopPropagation="true"
+                                    @onclick="@(() => ConfirmDeviceDelete(device))"
+                                    class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">Delete</button>
                         </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
-    <label for="userstable" class="mt-4 block mb-2 text-sm font-medium text-gray-900 dark:text-white">Users</label>
+    <div class="flex items-center space-x-2 mt-4 mb-2">
+        <label for="userstable" class="block text-sm font-medium text-gray-900 dark:text-white">Users</label>
+        <button type="button" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Add User</button>
+    </div>
     <table id="userstable" class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <colgroup>
             <col class="w-40" />
@@ -79,13 +88,76 @@
                     <td class="px-6 py-1">
                         <div class="flex gap-2 whitespace-nowrap justify-front">
                             <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</button>
-                            <button type="button" class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">Delete</button>
+                            <button type="button" 
+                                    @onclick:stopPropagation="true"
+                                    @onclick="@(() => ConfirmUserDelete(user))"
+                                    class="text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-red-600 dark:hover:bg-red-700 focus:outline-none dark:focus:ring-red-800">Delete</button>
                         </div>
                     </td>
                 </tr>
             }
         </tbody>
     </table>
+
+    <!-- Device Confirmation modal -->
+    @if (showDeviceDeleteConfirm)
+    {
+        <div class="fixed inset-0 z-50 flex items-center justify-center">
+            <div class="fixed inset-0 bg-black opacity-40" @onclick="CancelDeviceDelete"></div>
+
+            <div class="bg-white rounded-lg shadow-lg max-w-md w-full z-10 overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900">Delete Device</h3>
+                    <p class="mt-3 text-sm text-gray-600">
+                        Are you sure you want to delete the chatroom
+                        <strong class="text-gray-800">@selectedDeviceToDelete?.DeviceName</strong>?
+                        This will permanently remove the device and will require rejoining.
+                    </p>
+
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <button class="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
+                                @onclick="CancelDeviceDelete">
+                            Cancel
+                        </button>
+                        <button class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700"
+                                @onclick="PerformDeviceDelete">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    <!-- User Confirmation modal -->
+    @if (showUserDeleteConfirm)
+    {
+        <div class="fixed inset-0 z-50 flex items-center justify-center">
+            <div class="fixed inset-0 bg-black opacity-40" @onclick="CancelUserDelete"></div>
+
+            <div class="bg-white rounded-lg shadow-lg max-w-md w-full z-10 overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900">Delete chatroom</h3>
+                    <p class="mt-3 text-sm text-gray-600">
+                        Are you sure you want to delete the user
+                        <strong class="text-gray-800">@selectedUserToDelete?.DisplayName</strong>?
+                        This will permanently remove the user from your WYWO environment.
+                    </p>
+
+                    <div class="mt-6 flex justify-end space-x-3">
+                        <button class="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
+                                @onclick="CancelUserDelete">
+                            Cancel
+                        </button>
+                        <button class="px-4 py-2 rounded-md bg-red-600 text-white hover:bg-red-700"
+                                @onclick="PerformUserDelete">
+                            Delete
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
@@ -108,16 +180,72 @@
         });
         test_settings.WYWOUsers.Add(new WYWOUser
         {
+            Id = 1,
             DisplayName = "Nathan Ziehnert",
             Email = "nathan.ziehnert@gmail.com"
         });
         test_settings.WYWOUsers.Add(new WYWOUser
         {
+            Id = 2,
             DisplayName = "Rachel Ziehnert",
             Email = "rachel.ziehnert@gmail.com"
         });
 
         base.OnInitialized();
+    }
+
+    private WYWODevice? selectedDeviceToDelete;
+    private bool showDeviceDeleteConfirm = false;
+
+    private void ConfirmDeviceDelete(WYWODevice device)
+    {
+        selectedDeviceToDelete = device;
+        showDeviceDeleteConfirm = true;
+    }
+
+    private void CancelDeviceDelete()
+    {
+        selectedDeviceToDelete = null;
+        showDeviceDeleteConfirm = false;
+    }
+
+    private void PerformDeviceDelete()
+    {
+        if (selectedDeviceToDelete is not null)
+        {
+            // Mock deletion - remove from UI list immediately.
+            test_settings.WYWODevices.RemoveAll(r => r.DeviceID == selectedDeviceToDelete!.DeviceID);
+        }
+
+        selectedDeviceToDelete = null;
+        showDeviceDeleteConfirm = false;
+    }
+
+    private WYWOUser? selectedUserToDelete;
+    private bool showUserDeleteConfirm = false;
+
+    private void ConfirmUserDelete(WYWOUser User)
+    {
+        selectedUserToDelete = User;
+        showUserDeleteConfirm = true;
+    }
+
+    private void CancelUserDelete()
+    {
+        selectedUserToDelete = null;
+        showUserDeleteConfirm = false;
+    }
+
+    private void PerformUserDelete()
+    {
+        if (selectedUserToDelete is not null)
+        {
+            // Mock deletion - remove from UI list immediately.
+            test_settings.WYWOUsers.RemoveAll(r => r.Id == selectedUserToDelete!.Id);
+        }
+
+        selectedUserToDelete = null;
+        showUserDeleteConfirm = false;
     }
 
     private class WYWOSettings
@@ -129,14 +257,15 @@
 
     private class WYWODevice
     {
-        public string DeviceName { get; set; } = "Device 1";
-        public string DeviceID { get; set; } = "52:3e:48:48:42:c7";
-        public DateTime RegisteredDate { get; set; } = DateTime.Now.AddDays(-23);
+        public string? DeviceName { get; set; }
+        public string? DeviceID { get; set; }
+        public DateTime RegisteredDate { get; set; }
     }
 
     private class WYWOUser
     {
-        public string DisplayName { get; set; } = "Nathan Ziehnert";
-        public string Email { get; set; } = "nathan.ziehnert@gmail.com";
+        public int Id { get; set; }
+        public string? DisplayName { get; set; }
+        public string? Email { get; set; }
     }
 }
