@@ -2,16 +2,48 @@
 @layout AdminLayout
 @inherits FlowbitePage
 
+@using System.ComponentModel.DataAnnotations
 @inject NavigationManager NavManager
 
 <PageTitle>Admin - Settings</PageTitle>
 
 <div class="relative overflow-visible">
     <h1 class="mb-4 text-3xl leading-none tracking-tight text-gray-900 dark:text-white">Settings</h1>
+
     <form class="space-y-6" action="#">
         <label for="displayname" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">WYWO Display Name</label>
-        <input type="text" id="displayname" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="The Ziehnert's" value="@test_settings.DisplayName" required />
+        <div class="flex items-center gap-2">
+            <input type="text"
+                   id="displayname"
+                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full sm:max-w-lg p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                   placeholder="The Ziehnert's"
+                   value="@displayNameInput"
+                   @oninput="OnDisplayNameChanged"
+                   required />
+
+            @if (isSavingDisplayName)
+            {
+                <!-- Saving spinner (mocking API call) -->
+                <svg aria-hidden="true"
+                     class="w-5 h-5 animate-spin text-gray-300 fill-blue-600 dark:text-gray-600"
+                     viewBox="0 0 100 101" fill="none">
+                    <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908Z"
+                          fill="currentColor" />
+                    <path d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7235 75.2124 7.41289C69.5422 4.10226 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.447921 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.6512 25.841C85.3638 29.3691 87.5461 33.2624 89.1327 37.4143C90.083 39.798 91.5421 40.678 93.9676 39.0409Z"
+                          fill="currentFill" />
+                </svg>
+            }
+            else if (displayNameSaved)
+            {
+                <!-- Green check indicator -->
+                <svg class="w-5 h-5 text-green-600" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                     stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M4.5 12.75l6 6 9-13.5" />
+                </svg>
+            }
+        </div>
     </form>
+
     <div class="flex items-center space-x-2 mt-4 mb-2">
         <label for="devicestable" class="block text-sm font-medium text-gray-900 dark:text-white">Registered Devices</label>
         <button type="button" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Add Device</button>
@@ -59,7 +91,9 @@
     </table>
     <div class="flex items-center space-x-2 mt-4 mb-2">
         <label for="userstable" class="block text-sm font-medium text-gray-900 dark:text-white">Users</label>
-        <button type="button" class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Add User</button>
+        <button type="button"
+                @onclick="StartAddUser"
+                class="text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:ring-green-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-green-600 dark:hover:bg-green-700 focus:outline-none dark:focus:ring-green-800">Add User</button>
     </div>
     <table id="userstable" class="table-fixed w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <colgroup>
@@ -87,7 +121,9 @@
                     </td>
                     <td class="px-6 py-1">
                         <div class="flex gap-2 whitespace-nowrap justify-front">
-                            <button type="button" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</button>
+                            <button type="button"
+                                    @onclick="() => StartEditUser(user)"
+                                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-3 py-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">Edit</button>
                             <button type="button" 
                                     @onclick:stopPropagation="true"
                                     @onclick="@(() => ConfirmUserDelete(user))"
@@ -159,14 +195,80 @@
             </div>
         </div>
     }
+
+    <!-- User Add/Edit (Upsert) modal -->
+    @if (showUserUpsertModal)
+    {
+        <div class="fixed inset-0 z-50 flex items-center justify-center">
+            <div class="fixed inset-0 bg-black opacity-40" @onclick="CancelUserUpsert"></div>
+
+            <div class="bg-white rounded-lg shadow-lg max-w-md w-full z-10 overflow-hidden">
+                <div class="p-6">
+                    <h3 class="text-lg font-semibold text-gray-900">
+                        @(selectedUserToEdit is null ? "Add User" : "Edit User")
+                    </h3>
+
+                    <EditForm Model="@editUser" OnValidSubmit="@SaveUserUpsert">
+                        <DataAnnotationsValidator />
+                        <div class="mt-4 space-y-4">
+                            <div>
+                                <label for="userDisplayName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Display Name</label>
+                                <InputText id="userDisplayName"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                           @bind-Value="editUser.DisplayName" />
+                                <ValidationMessage For="@(() => editUser.DisplayName)" class="text-red-800" />
+                            </div>
+
+                            <div>
+                                <label for="userEmail" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Email</label>
+                                <InputText id="userEmail"
+                                           type="email"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                           @bind-Value="editUser.Email" />
+                                <ValidationMessage For="@(() => editUser.Email)" class="text-red-800" />
+                            </div>
+
+                            <div>
+                                <label for="userPhone" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Phone (optional)</label>
+                                <InputText id="userPhone"
+                                           class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                           @bind-Value="editUser.PhoneNumber" />
+                                <ValidationMessage For="@(() => editUser.PhoneNumber)" class="text-red-800" />
+                            </div>
+                        </div>
+
+                        <div class="mt-6 flex justify-end space-x-3">
+                            <button type="button"
+                                    class="px-4 py-2 rounded-md bg-gray-100 text-gray-800 hover:bg-gray-200"
+                                    @onclick="CancelUserUpsert">
+                                Cancel
+                            </button>
+                            <button type="submit"
+                                    class="px-4 py-2 rounded-md bg-blue-600 text-white hover:bg-blue-700">
+                                @(selectedUserToEdit is null ? "Add" : "Save")
+                            </button>
+                        </div>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    }
 </div>
 
 @code {
     private WYWOSettings test_settings = new WYWOSettings();
 
+    // Display Name reactive state
+    private string displayNameInput = "";
+    private bool isSavingDisplayName = false;
+    private bool displayNameSaved = false;
+    private CancellationTokenSource? displayNameCts;
+
     protected override void OnInitialized()
     {
-        test_settings.DisplayName = "The Ziehnert's";
+        test_settings.DisplayName = "The Ziehnert's House";
+        displayNameInput = test_settings.DisplayName;
+
         test_settings.WYWODevices.Add(new WYWODevice
         {
             Id = 1,
@@ -197,6 +299,57 @@
         base.OnInitialized();
     }
 
+    private async Task OnDisplayNameChanged(ChangeEventArgs e)
+    {
+        displayNameInput = e.Value?.ToString() ?? "";
+        displayNameSaved = false;
+
+        // Debounce: cancel previous pending save
+        displayNameCts?.Cancel();
+        displayNameCts?.Dispose();
+        displayNameCts = new CancellationTokenSource();
+        var token = displayNameCts.Token;
+
+        try
+        {
+            // Wait for user to pause typing (600ms)
+            await Task.Delay(600, token);
+            await SaveDisplayNameAsync();
+        }
+        catch (TaskCanceledException)
+        {
+            // Swallow - expected when user keeps typing
+        }
+    }
+
+    private async Task SaveDisplayNameAsync()
+    {
+        if (isSavingDisplayName)
+            return;
+
+        isSavingDisplayName = true;
+        displayNameSaved = false;
+
+        // Update local model immediately (would be payload for API)
+        test_settings.DisplayName = displayNameInput;
+        StateHasChanged();
+
+        // Mock API latency
+        await Task.Delay(800);
+
+        isSavingDisplayName = false;
+        displayNameSaved = true;
+        StateHasChanged();
+
+        // Auto-hide the saved check after 2 seconds
+        _ = Task.Run(async () =>
+        {
+            await Task.Delay(2000);
+            displayNameSaved = false;
+            await InvokeAsync(StateHasChanged);
+        });
+    }
+
     private WYWODevice? selectedDeviceToDelete;
     private bool showDeviceDeleteConfirm = false;
 
@@ -216,7 +369,6 @@
     {
         if (selectedDeviceToDelete is not null)
         {
-            // Mock deletion - remove from UI list immediately.
             test_settings.WYWODevices.RemoveAll(r => r.Id == selectedDeviceToDelete!.Id);
         }
 
@@ -243,12 +395,66 @@
     {
         if (selectedUserToDelete is not null)
         {
-            // Mock deletion - remove from UI list immediately.
             test_settings.WYWOUsers.RemoveAll(r => r.Id == selectedUserToDelete!.Id);
         }
 
         selectedUserToDelete = null;
         showUserDeleteConfirm = false;
+    }
+
+    // Upsert (Add/Edit) state
+    private bool showUserUpsertModal = false;
+    private WYWOUser? selectedUserToEdit;
+    private WYWOUser editUser = new WYWOUser();
+
+    private void StartAddUser()
+    {
+        selectedUserToEdit = null;
+        editUser = new WYWOUser();
+        showUserUpsertModal = true;
+    }
+
+    private void StartEditUser(WYWOUser user)
+    {
+        selectedUserToEdit = user;
+        editUser = new WYWOUser
+        {
+            Id = user.Id,
+            DisplayName = user.DisplayName,
+            Email = user.Email,
+            PhoneNumber = user.PhoneNumber
+        };
+        showUserUpsertModal = true;
+    }
+
+    private void CancelUserUpsert()
+    {
+        selectedUserToEdit = null;
+        editUser = new WYWOUser();
+        showUserUpsertModal = false;
+    }
+
+    private void SaveUserUpsert()
+    {
+        if (selectedUserToEdit is null)
+        {
+            var newId = test_settings.WYWOUsers.Count == 0
+                ? 1
+                : test_settings.WYWOUsers.Max(u => u.Id) + 1;
+
+            editUser.Id = newId;
+            test_settings.WYWOUsers.Add(editUser);
+        }
+        else
+        {
+            selectedUserToEdit.DisplayName = editUser.DisplayName;
+            selectedUserToEdit.Email = editUser.Email;
+            selectedUserToEdit.PhoneNumber = editUser.PhoneNumber;
+        }
+
+        selectedUserToEdit = null;
+        editUser = new WYWOUser();
+        showUserUpsertModal = false;
     }
 
     private class WYWOSettings
@@ -269,9 +475,21 @@
     private class WYWOUser
     {
         public int Id { get; set; }
-        public string? DisplayName { get; set; }
-        public string? Email { get; set; }
-        public string? PhoneNumber { get; set; }
 
+        [Required(ErrorMessage = "Display name is required")]
+        public string? DisplayName { get; set; }
+
+        [Required(ErrorMessage = "Email is required")]
+        [EmailAddress(ErrorMessage = "Invalid email address")]
+        public string? Email { get; set; }
+
+        [Phone(ErrorMessage = "Invalid phone number")]
+        public string? PhoneNumber { get; set; }
+    }
+
+    public void Dispose()
+    {
+        displayNameCts?.Cancel();
+        displayNameCts?.Dispose();
     }
 }
