@@ -109,9 +109,10 @@
                 <div class="p-6">
                     <h3 class="text-lg font-semibold text-gray-900">Delete Device</h3>
                     <p class="mt-3 text-sm text-gray-600">
-                        Are you sure you want to delete the chatroom
+                        Are you sure you want to delete the device
                         <strong class="text-gray-800">@selectedDeviceToDelete?.DeviceName</strong>?
-                        This will permanently remove the device and will require rejoining.
+                        <br /><br /><strong class="text-red-800">WARNING!</strong><br />
+                        This will permanently remove the device and the device will require rejoining if you wish to use it in the future.
                     </p>
 
                     <div class="mt-6 flex justify-end space-x-3">
@@ -137,7 +138,7 @@
 
             <div class="bg-white rounded-lg shadow-lg max-w-md w-full z-10 overflow-hidden">
                 <div class="p-6">
-                    <h3 class="text-lg font-semibold text-gray-900">Delete chatroom</h3>
+                    <h3 class="text-lg font-semibold text-gray-900">Delete User</h3>
                     <p class="mt-3 text-sm text-gray-600">
                         Are you sure you want to delete the user
                         <strong class="text-gray-800">@selectedUserToDelete?.DisplayName</strong>?
@@ -168,12 +169,14 @@
         test_settings.DisplayName = "The Ziehnert's";
         test_settings.WYWODevices.Add(new WYWODevice
         {
+            Id = 1,
             DeviceName = "Summer Home",
             DeviceID = "42:9e:23:43:22:c4",
             RegisteredDate = DateTime.Now.AddDays(-50)
         });
         test_settings.WYWODevices.Add(new WYWODevice
         {
+            Id = 2,
             DeviceName = "Lake House",
             DeviceID = "52:3e:48:48:42:c7",
             RegisteredDate = DateTime.Now.AddDays(-23)
@@ -214,7 +217,7 @@
         if (selectedDeviceToDelete is not null)
         {
             // Mock deletion - remove from UI list immediately.
-            test_settings.WYWODevices.RemoveAll(r => r.DeviceID == selectedDeviceToDelete!.DeviceID);
+            test_settings.WYWODevices.RemoveAll(r => r.Id == selectedDeviceToDelete!.Id);
         }
 
         selectedDeviceToDelete = null;
@@ -257,6 +260,7 @@
 
     private class WYWODevice
     {
+        public int Id { get; set; }
         public string? DeviceName { get; set; }
         public string? DeviceID { get; set; }
         public DateTime RegisteredDate { get; set; }
@@ -267,5 +271,7 @@
         public int Id { get; set; }
         public string? DisplayName { get; set; }
         public string? Email { get; set; }
+        public string? PhoneNumber { get; set; }
+
     }
 }
