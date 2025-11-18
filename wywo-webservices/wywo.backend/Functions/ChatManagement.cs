@@ -31,13 +31,34 @@ public class ChatManagement
             return bad;
         }
 
-        // Placeholder
-        return req.CreateResponse(System.Net.HttpStatusCode.NotImplemented);
+        // Extract the token from the body, and convert to JWT
+        // Validate that it is a well-formed JWT
+
+        // Extract the calling user information from the body and validate the payload (Name, Initial Message, and if
+        // they wanted to be notified via phone the included phone number)
 
         // Validate the request came from a registered device
+        // We'll get the iss claim from the JWT (passed as the token in the request body) and check against the devices table
+        // If we have a valid device, now we can pull the public key for that device and validate the JWT signature
+        // If the JWT is valid, we can proceed to create the chat room, otherwise return 401 Unauthorized
 #if DEBUG
         // In debug mode, we'll allow chat creation with a fake POST body, but must reference a registered device ID
+#elif RELEASE
+        // In release mode, we must have a valid JWT in the POST body
 #endif
+
+        // Now that we've validated the request came from a registered device, we can create the chat room
+        // Create a new chat ID and do the needful in Redis to set up the chat room
+        // As part of the Redis setup, we'll need to create an access token for the anonymous user (the one who created the room)
+        
+        // Get user communication preferences from Users table
+        // Send notifications to all registered users that a new chat is open (Azure Communication Services)
+        // If the calling user wanted to receive the link to the chat, send a message with a direct link (including access token) to the user via ACS (delay by ~30 seconds)
+
+        // Return to front end the link above (including access token) so that the app can redirect to the chat room
+
+        // Placeholder
+        return req.CreateResponse(System.Net.HttpStatusCode.NotImplemented);
     }
 
     // Function JoinChat
