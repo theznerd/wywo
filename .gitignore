@@ -2,3 +2,7 @@
 .vs/
 /wywo-webservices/wywo.frontend/appsettings.json
 /wywo-webservices/wywo.frontend/settings.json
+/wywo-webservices/wywo.backend/local.settings.json
+/wywo-webservices/wywo.frontend/appsettings.Development.json
+/wywo-webservices/wywo.backend/local - Copy.settings.template.json
+/wywo-webservices/wywo.backend/local.settings.json
